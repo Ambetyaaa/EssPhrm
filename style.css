@@ -1,0 +1,132 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+ 
+}
+.body {
+  text-align: center;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  padding: 20px;
+}
+
+.right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: darkblue;
+  padding: 20px;
+  color: white;
+  font-family: Arial, sans-serif;
+  height: 55%;
+}
+
+
+
+.logo  {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.logo-text {
+  font-size: 30px;
+  font-style: inherit;
+  font-weight: bold;
+}
+
+.logo-shape {
+  position: absolute;
+  top: 32%;
+  left: 40%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  background-color: darkblue;
+  border-radius: 60%;
+  margin-right: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+.EssPLogo {
+  width: 100%;
+  max-width: 400px;
+  margin: 5%;
+}
+
+.greeting {
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+.input {
+  width: 100%;
+  max-width: 300px;
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid white;
+  border-radius: 5px;
+  outline: none;
+  font-size: 16px;
+}
+
+.input-label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.checkbox-input {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.link {
+  color: white;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.button {
+  width: 100%;
+  max-width: 300px;
+  padding: 15px;
+  background-color: white;
+  color: darkblue;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: lightgray;
+}
