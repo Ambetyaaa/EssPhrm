@@ -2,46 +2,30 @@
 session_start();
 include 'conndb.php';
 
-// Check if the form is submitted for deletion
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["deleteEmployee"])) {
-    $employeeIdToDelete = $_POST["employeeIdToDelete"];
-
-    // Perform the deletion logic
-    $sql = "DELETE FROM employees WHERE idemployees = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $employeeIdToDelete);
-
-    if ($stmt->execute()) {
-        echo "Employee with ID $employeeIdToDelete deleted successfully!";
-    } else {
-        echo "Error deleting employee: " . $stmt->error;
-    }
-
-    $stmt->close();
-}
+// Default total leave allowance
+$defaultTotalLeave = 15;
 
 // Check if the employee ID is set in the session (assuming it's set during login)
 if (isset($_SESSION["employeeId"])) {
     $employeeId = $_SESSION["employeeId"];
 
-    // Fetch employee data based on the employee ID
-    $sql = "SELECT * FROM employees WHERE idemployees = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $employeeId);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    // Fetch leave requests for the employee
+    $sqlLeave = "SELECT * FROM employees_record WHERE idemployees = ?";
+    $stmtLeave = $conn->prepare($sqlLeave);
+    $stmtLeave->bind_param("i", $employeeId);
+    $stmtLeave->execute();
+    $resultLeave = $stmtLeave->get_result();
 
-    // Check if data is retrieved successfully
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        $leaveRequests = $row["leave_requests"];
-        $leaveAvailable = $row["leave_available"];
-        $currentYear = date("Y");
-    } else {
-        echo "Error fetching employee data.";
+    $leaveRequests = array();
+    while ($rowLeave = $resultLeave->fetch_assoc()) {
+        $leaveRequests[] = array(
+            'idemployees' => $employeeId,
+            'reason' => $rowLeave["reason_of_leave"],
+            'date' => $rowLeave["date_of_leave"]
+        );
     }
 
-    $stmt->close();
+    $stmtLeave->close();
 }
 
 $conn->close();
@@ -63,51 +47,32 @@ $conn->close();
     <table>
         <tr>
             <th>Idemployees</th>
-            <th>Request Leave</th>
-            <th>Number of Leave Available</th>
-            <th>Year</th>
-            <th>Action</th>
+            <th>Reason</th>
+            <th>Date</th>
         </tr>
-        <tr>
-            <td>
-                <?php echo $employeeId; ?>
-            </td>
-            <td>
-                <?php echo $leaveRequests ?? ''; ?>
-            </td>
-            <td>
-                <?php echo $leaveAvailable ?? ''; ?>
-            </td>
-            <td>
-                <?php echo $currentYear ?? ''; ?>
-            </td>
-            <td>
-                <button class="button" type="button" id="editButton" onclick="editLeave()">Edit</button>
-                <form method="post" style="display: inline;">
-                    <input type="hidden" name="employeeIdToDelete" value="<?php echo $employeeId; ?>">
-                    <button class="button" type="submit" name="deleteEmployee">Delete</button>
-                </form>
-                <button class="button" type="button" id="addButton" onclick="addDb()">Add.db</button>
-            </td>
-        </tr>
+        <?php
+        foreach ($leaveRequests as $request) {
+            echo "<tr>";
+            echo "<td>{$request['idemployees']}</td>";
+            echo "<td>{$request['reason']}</td>";
+            echo "<td>{$request['date']}</td>";
+            echo "</tr>";
+        }
+        ?>
     </table>
-
-    <button class="button" type="button" id="addLeaveButton" onclick="addLeave()">Add Leave</button>
+    <p>Total Leave:
+        <?php echo $defaultTotalLeave; ?>
+    </p>
+    <p>Deducted Leave:
+        <?php echo $defaultTotalLeave - count($leaveRequests); ?>
+    </p>
+    <button class="button" type="button" id="addLeaveButton" <?php echo (count($leaveRequests) >= $defaultTotalLeave) ? 'disabled' : ''; ?> onclick="addLeave()">Add Leave</button>
 
     <script>
-        function editLeave() {
-            console.log('Edit button clicked');
-        }
-
-        function addDb() {
-            console.log('Add button clicked');
-        }
-
         function addLeave() {
             console.log('Add Leave button clicked');
         }
     </script>
-
 </body>
 
 </html>
