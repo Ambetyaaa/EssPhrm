@@ -39,6 +39,9 @@
         cursor: pointer;
 
     }
+    .rightalign {
+        float: right;
+    }
     
     .button:hover {
         background-color: blue;

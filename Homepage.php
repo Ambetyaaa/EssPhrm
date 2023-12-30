@@ -43,6 +43,7 @@ $conn->close();
 
 <body>
     <h1>Employee Self-Service Portal</h1>
+    <div> <button id="logout" class="button rightalign" onclick=logout()>LOG OUT</button></div>
 
     <table>
         <tr>
@@ -63,7 +64,7 @@ $conn->close();
     <p>Total Leave:
         <?php echo $defaultTotalLeave; ?>
     </p>
-    <p>Deducted Leave:
+    <p>Available Leave:
         <?php echo $defaultTotalLeave - count($leaveRequests); ?>
     </p>
     <button class="button" type="button" id="addLeaveButton" <?php echo (count($leaveRequests) >= $defaultTotalLeave) ? 'disabled' : ''; ?> onclick="addLeave()">Add Leave</button>
@@ -71,6 +72,9 @@ $conn->close();
     <script>
         function addLeave() {
             window.location.href = 'addleave.php';
+        }
+        function logout() {
+            window.location.href = 'logout.php';
         }
     </script>
 </body>
