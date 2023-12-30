@@ -70,7 +70,7 @@ $conn->close();
 
     <script>
         function addLeave() {
-            console.log('Add Leave button clicked');
+            window.location.href = 'addleave.php';
         }
     </script>
 </body>
